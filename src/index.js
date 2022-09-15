@@ -88,7 +88,9 @@ function createCountriesInfoMarkup(country) {
           Population: <span class="country-info__value">${population}</span>
         </p>
         <p class="country-info__descr">
-          Languages: <span class="country-info__value">${languages})</span>
+          Languages: <span class="country-info__value">${Object.values(
+            languages
+          ).join(', ')}</span>
         </p>`;
       }
     )
