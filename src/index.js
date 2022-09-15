@@ -21,7 +21,7 @@ function searchCountries() {
   console.log(searchQuery);
 
   if (searchQuery) {
-    API.fetchCountries(searchQuery.trim())
+    API.fetchCountries(searchQuery)
       .then(appendCountriesMarkup)
       .catch(onFetchError);
   } else {
