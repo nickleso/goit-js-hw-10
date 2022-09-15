@@ -1,10 +1,9 @@
 import './css/styles.css';
-// import CountriesApiService from './fetchCountries.js';
 import API from './fetchCountries.js';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 var debounce = require('lodash.debounce');
-const DEBOUNCE_DELAY = 1000;
+const DEBOUNCE_DELAY = 300;
 
 const refs = {
   inputEl: document.querySelector('#search-box'),
@@ -12,32 +11,29 @@ const refs = {
   infoContainerEl: document.querySelector('.country-info'),
 };
 
-console.dir(refs.inputEl);
-console.log(refs.listEl);
-console.log(refs.infoContainerEl);
-
-// const countriesApiService = new CountriesApiService();
-
 const onDebounceSearchCountries = debounce(searchCountries, DEBOUNCE_DELAY);
 refs.inputEl.addEventListener('input', onDebounceSearchCountries);
 
+// search function
 function searchCountries() {
   clearMurkup();
   const searchQuery = refs.inputEl.value;
 
-  API.fetchCountries(searchQuery)
+  API.fetchCountries(searchQuery.trim())
     .then(appendCountriesMarkup)
     .catch(onFetchError);
 }
 
-// const countriesMarkup = createCountriesMarkup(countries);
-function clearMurkup() {
-  refs.infoContainerEl.innerHTML = '';
-  refs.listEl.innerHTML = '';
+function onFetchError() {
+  error => {
+    console.log(error);
+  };
 }
 
+// markup functions
 function appendCountriesMarkup(country) {
   console.log(country.length);
+
   if (country.length > 10) {
     Notify.info('Too many matches found. Please enter a more specific name.', {
       position: 'center-top',
@@ -57,11 +53,9 @@ function appendCountriesMarkup(country) {
       'beforeend',
       createCountriesInfoMarkup(country)
     );
-  } else {
   }
 }
 
-// markup function
 function createCountriesListMarkup(country) {
   return country
     .map(({ flags: { svg }, name: { official } }) => {
@@ -94,13 +88,14 @@ function createCountriesInfoMarkup(country) {
           Population: <span class="country-info__value">${population}</span>
         </p>
         <p class="country-info__descr">
-          Languages: <span class="country-info__value">${languages}</span>
+          Languages: <span class="country-info__value">${languages})</span>
         </p>`;
       }
     )
     .join('');
 }
 
-function onFetchError() {
-  // body
+function clearMurkup() {
+  refs.infoContainerEl.innerHTML = '';
+  refs.listEl.innerHTML = '';
 }
