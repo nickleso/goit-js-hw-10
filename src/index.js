@@ -17,11 +17,19 @@ refs.inputEl.addEventListener('input', onDebounceSearchCountries);
 // search function
 function searchCountries() {
   clearMurkup();
-  const searchQuery = refs.inputEl.value;
+  const searchQuery = refs.inputEl.value.trim();
+  console.log(searchQuery);
 
-  API.fetchCountries(searchQuery.trim())
-    .then(appendCountriesMarkup)
-    .catch(onFetchError);
+  if (searchQuery) {
+    API.fetchCountries(searchQuery.trim())
+      .then(appendCountriesMarkup)
+      .catch(onFetchError);
+  } else {
+    Notify.info('Type something.', {
+      position: 'center-top',
+      fontSize: '14px',
+    });
+  }
 }
 
 function onFetchError() {
